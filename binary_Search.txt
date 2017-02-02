@@ -1,0 +1,9 @@
+		long low=0,high=(long)1e18;
+		while(low<high) {
+			long mid=low+((high-low)>>1);
+			if(fun(mid)) 
+				high=mid;
+			else
+				low=mid+1;
+		}
+		ob.println(low);

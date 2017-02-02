@@ -1,0 +1,83 @@
+/* help from http://fusharblog.com/solving-linear-recurrence-for-programming-contest/
+*/
+
+
+import java.io.*;
+import java.util.*;
+class Spoj_SEQ
+{
+	BufferedReader in;
+	PrintWriter ob;
+	StringTokenizer st;
+	long mod=(long)(1e9);
+	public static void main(String[] args) throws IOException {
+		new Spoj_SEQ().run();
+	}
+	void run() throws IOException {
+		//in=new BufferedReader(new FileReader("input.txt"));
+		in=new BufferedReader(new InputStreamReader(System.in));
+		ob=new PrintWriter(System.out);
+		int t=ni();
+		while(t-->0)
+		solve();
+		ob.flush();
+	}
+	void solve() throws IOException {
+		int k=ni();
+		long b[]=new long[k+1];
+		long c[]=new long[k+1];
+		for(int i=1 ; i<=k ; i++ )
+			b[i]=nl();
+		for(int j=1 ; j<=k ; j++ )
+			c[j]=nl();
+		long mat[][]=new long[k+1][k+1];
+		for(int i=1 ; i<k ; i++) {
+			for(int j=1 ; j<=k ; ++j ) {
+				mat[i][j]=(i==j-1)?1:0;
+			}
+		}
+		for(int i=1 ; i<=k ; ++i) 
+			mat[k][i]=c[k-i+1];
+		int q=ni();
+		if(q<=k)
+			ob.println(b[q]);
+		else 
+		{
+			q-=(k-1);
+			long T[][]=pow(mat , q-1);
+			long res=0;
+			for(int i=1 ; i<=k ; ++i) 
+				res=((res%mod)+(((T[k][i]%mod)*1L*(b[i]%mod))%mod))%mod;
+			ob.println(res);
+		}
+	}
+	long[][] pow(long t[][] , int p) {
+		if(p==1)
+			return t;
+		else if(p%2!=0)
+			return mul( t , pow(t , p-1 ));
+		long x[][] = pow(t,p/2);
+		return mul(x,x);
+	}
+	long[][] mul(long a[][] , long b[][]) {
+		long c[][]=new long[a.length][b.length];
+		for(int i=1 ; i<a.length ; i++) {
+			for(int j=1 ; j<b.length ; j++) {
+				for(int k=1 ; k<b.length ; k++)
+					c[i][j]=((c[i][j]%mod)+(((a[i][k]%mod)*1L*(b[k][j]%mod))%mod))%mod;
+			}
+		}
+		return c;
+	}
+	long nl() throws IOException {
+		return Long.parseLong(nextToken());
+	}
+	int ni() throws IOException {
+		return Integer.parseInt(nextToken());
+	}
+	String nextToken() throws IOException {
+		if(st==null || !st.hasMoreTokens())
+			st=new StringTokenizer(in.readLine());
+		return st.nextToken();
+	}
+}

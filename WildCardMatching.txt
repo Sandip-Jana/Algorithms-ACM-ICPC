@@ -1,0 +1,99 @@
+//WildCard_Matching_Technique
+import java.math.*;
+import java.io.*;
+import java.util.*;
+class WildCardMatching
+{
+	StringTokenizer st;
+	BufferedReader in;
+	PrintWriter ob;
+	public static void main(String args[])throws IOException {
+		new WildCardMatching().run();
+	}
+	void run()throws IOException   {
+		in=new BufferedReader(new FileReader("input.txt"));
+		ob=new PrintWriter("output.txt");
+		//in=new BufferedReader(new InputStreamReader(System.in));
+		//ob=new PrintWriter(System.out);
+		solve();
+		ob.flush();
+	}
+	void solve()throws IOException{
+		read();
+		char str[]=ns().toCharArray();
+		read();
+		char pattern[]=ns().toCharArray();
+		// reducing the pattern bcz mutiple *'s turn out to be a single * only
+		String s="";
+		int flag=1;
+		for(int i=0;i<pattern.length;i++){
+				if(pattern[i]=='*'){
+					if(flag==1){
+						s=s+(char)pattern[i];
+						flag=0;
+					}
+				}
+				else
+				{
+					s=s+(char)pattern[i];
+					flag	=1;
+				}
+		}
+		pattern=s.toCharArray();
+		System.out.println(pattern); 
+		int lstr=str.length;
+		int lp=pattern.length;
+		boolean dp[][]=new boolean[lstr+1][lp+1];
+		dp[0][0]=true;
+		if(lp>0 && pattern[0]=='*')
+			dp[0][1]=true;
+     
+		for(int i=1;i<=lstr;i++){
+			for(int j=1;j<=lp;j++){
+				if(str[i-1]==pattern[j-1] || pattern[j-1]=='?')
+					dp[i][j]=dp[i-1][j-1];
+				else if(pattern[j-1]=='*')
+					dp[i][j]=dp[i-1][j] || dp[i][j-1];
+			}
+		}
+		for(boolean a[] : dp){
+			for(boolean j: a)
+				System.out.print(j+ " " );
+			System.out.println();
+		}
+    }
+	void read()throws IOException  {
+		st=new StringTokenizer(in.readLine());
+	}
+	int ni(){
+		return Integer.parseInt(st.nextToken());
+	}
+	long nl(){
+		return Long.parseLong(st.nextToken());
+	}
+	double nd(){
+		return Double.parseDouble(st.nextToken());
+	}
+	String ns(){
+		return st.nextToken();
+	}
+	char nc(){
+		return st.nextToken().charAt(0);
+	}
+	int[] nia(int n)throws IOException {
+		int a[]=new int[n];
+		read();
+		for(int i=0;i<n;i++){
+			a[i]=Integer.parseInt(st.nextToken());
+		}
+		return a;
+	}
+	long[] nla(int n)throws IOException {
+		long a[]=new long[n];
+		read();
+		for(int i=0;i<n;i++){
+			a[i]=Long.parseLong(st.nextToken());
+		}
+		return a;
+	}
+}

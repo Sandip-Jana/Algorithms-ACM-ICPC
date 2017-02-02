@@ -1,0 +1,3 @@
+boolean hasbits(long n, int pos) {
+		return (n & (1L << pos) )!= 0;
+	}

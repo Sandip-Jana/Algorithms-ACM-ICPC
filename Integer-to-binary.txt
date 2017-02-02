@@ -1,0 +1,14 @@
+char[] binary(int a) {
+		char s[]=new char[61];
+		char bin[]=Integer.toBinaryString(a).toCharArray();
+		int len=bin.length;
+		for(int i=60;i>=0;i--) {
+			if(len-1>=0) {
+				s[i]=bin[len-1];
+				len--;
+			}
+			else
+				s[i]='0';
+		}
+		return s;
+	}

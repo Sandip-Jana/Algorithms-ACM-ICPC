@@ -1,0 +1,10 @@
+public static boolean isPrime(int n){
+		if(n <= 1) return false;
+		if(n == 2) return true;
+		if(n % 2 == 0) return false;
+		int m = (int) (Math.sqrt(n) + 15); //2 is not a factor coz we would have returned false then
+		m = Math.min(m, n-1);
+		for(int i = 3;i <= m;i += 2) //if a*b = n then atleat one of a,b <= m
+			if(n % i == 0) return false;
+		return true;
+	}

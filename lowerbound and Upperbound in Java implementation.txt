@@ -1,0 +1,27 @@
+public static int lowerBound(long[] a, long v)
+	{
+		int low = -1, high = a.length;
+		while(high-low > 1){
+			int h = high+low>>>1;
+			if(v<=a[h]){
+				high = h;
+			}else{
+				low = h;
+			}
+		}
+		return high;
+	}
+	
+	public static int upperBound(long[] a, long v)
+	{
+		int low = -1, high = a.length;
+		while(high-low > 1){
+			int h = high+low>>>1;
+			if(v>=a[h]){
+				low = h;
+			}else{
+				high = h;
+			}
+		}
+		return low;
+	}

@@ -1,0 +1,106 @@
+import java.io.*;
+import java.util.*;
+class lunch_LCALA2
+{
+	BufferedReader in;
+	PrintWriter ob;
+	StringTokenizer st;
+	ArrayList<Integer> gr[];
+	int dp[][] , maxdepth ,level[] ,parent[] ;
+	public static void main(String[] args) throws IOException {
+		new lunch_LCALA2().run();
+	}
+	void run() throws IOException {
+		in=new BufferedReader(new InputStreamReader(System.in));
+		ob=new PrintWriter(System.out);
+		solve();
+		ob.flush();
+	}
+	@SuppressWarnings("unchecked")
+	void solve() throws IOException {
+		int n=ni();
+		gr=new ArrayList[n+1];
+		for(int i=0 ; i<=n ; i++) gr[i]=new ArrayList<Integer>();
+		for(int k=1 ; k<=n-1 ; k++) {
+			int u=ni();
+			int v=ni();
+			gr[u].add(v);
+			gr[v].add(u);
+		}
+		level=new int[n+1];
+		parent=new int[n+1];
+		dfs(1 , -1 , 0);
+		maxdepth=(int)(Math.log(maxdepth)/(double)Math.log(2));
+		dp=new int[n+1][maxdepth+1];
+		for (int i=0; i<=n ; i++ ) {
+		Arrays.fill(dp[i], -1 );
+		}
+		for(int i=1 ; i<=n ; i++ )
+			dp[i][0]= (parent[i]!=0) ? parent[i] : -1 ;
+		for(int j=1 ; j<=maxdepth ; j++) {
+			for (int i=1; i<=n ; i++ ) {
+				if(dp[i][j-1]!=-1)
+				dp[i][j]=dp[dp[i][j-1]][j-1];
+			}
+		}
+		int q=ni();
+		while(q-->0) {
+			int r=ni();
+			int u=ni();
+			int v=ni();
+			int x = lca(r,u);
+			int y = lca(r,v);
+			int z = lca(u,v);
+			ob.println(compare(x,y,z));
+		}
+	}
+	int compare(int i , int j ,int  k) {
+		if(i==j && j!=k)
+			return k;
+		else if(i==k && j!=k)
+			return j;
+		else if(j==k && i!=j)
+			return i;
+		else
+			return i;
+	}
+
+	int lca(int u , int v) {
+		if( level[u] < level[v] ) {
+			int d=u ; u=v ; v=d;
+		}
+		int dist = level[u] - level[v];
+		while(dist > 0) {
+			int raise_by = (int)(Math.log(dist)/(double) Math.log(2));
+			u=dp[u][raise_by];
+			dist-=(1<<raise_by);
+		}	
+		if(u==v)
+			return u;
+		for(int j=maxdepth ; j>=0 ; j--) {
+			if(dp[u][j]!=-1 && dp[u][j]!=dp[v][j]) {
+				u=dp[u][j];
+				v=dp[v][j];
+			}
+		}
+		return parent[u];
+	}
+	void dfs(int u , int par ,int depth) {
+		if(level[u]!=0) return;
+		level[u]=depth;
+		maxdepth = Math.max(depth , maxdepth);
+		for (int v : gr[u] ) {
+			if(v==par) continue;
+			parent[v]=u;
+			dfs( v , u , depth+1);
+		}
+	}
+	int ni() throws IOException {
+		return Integer.parseInt(nextToken());
+	}
+	String nextToken() throws IOException {
+		if(st==null || !st.hasMoreTokens())
+			st=new StringTokenizer(in.readLine());
+		return st.nextToken();
+	}
+}

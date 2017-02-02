@@ -1,0 +1,59 @@
+//package segmenttree;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+/**
+ * @ author : - SANDIP JANA on 03-10-2015.
+ *  userid  : - sandip_jana
+ */
+public class segtree
+{
+    static int stree[];
+    static int a[];
+    public static void main(String args[])throws IOException
+    {
+        BufferedReader in=new BufferedReader(new InputStreamReader(System.in));
+        int n=Integer.parseInt(in.readLine());
+        StringTokenizer st=new StringTokenizer(in.readLine());
+        a=new int[n+1];
+        for(int i=1;i<=n;i++)
+        {
+            a[i]=Integer.parseInt(st.nextToken());
+        }
+        int len=(int)(2.0)*(int)Math.pow(2,Math.floor((Math.log((double)n)/Math.log(2.0)) + 1));
+        stree=new int[2*len];
+        build_tree(1,1,n);
+       // for(int i=1;i<len;i++)
+         //   System.out.println(stree[i]);
+        System.out.println(query_tree(1,1,n,1,3));
+    }
+    public static void build_tree(int index,int l,int r)
+    {
+        //System.out.println(index+" "+l);
+        if(l==r) {
+            stree[index] = a[r];
+            return;
+        }
+        if(l>r)
+            return;
+        int mid=(l+r)/2;
+        build_tree(2*index,l,mid);
+        build_tree(2*index+1,mid+1,r);
+            stree[index]=Math.max(stree[2*index],stree[2*index+1]);
+    }
+    public static int query_tree(int index,int l,int r,int i,int j)
+    {
+        System.out.println(l + " " + r + " " + index);
+        if(i>r || j<l)
+            return -1;
+        if(l>=i && r<=j)
+            return stree[index];
+        int mid=(l+r)/2;
+        int left=query_tree(2*index,l,mid,i,j);
+        int right=query_tree(2*index+1,mid+1,r,i,j);
+        return Math.max(left,right);
+    }
+}

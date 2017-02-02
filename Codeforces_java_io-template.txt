@@ -1,0 +1,51 @@
+import java.io.*;
+import java.util.*;
+public class div
+{
+	BufferedReader in;
+	PrintWriter ob;
+	StringTokenizer st;
+	public static void main(String[] args) throws IOException {
+		new div().run();
+	}
+	void run() throws IOException {
+		//in=new BufferedReader(new FileReader("input.txt"));
+		in=new BufferedReader(new InputStreamReader(System.in));
+		ob=new PrintWriter(System.out);
+		solve();
+		ob.flush();
+	}
+	void solve() throws IOException {
+	
+	}
+	String ns() throws IOException {
+		return nextToken();
+	}
+	long nl() throws IOException {
+		return Long.parseLong(nextToken());
+	}
+	int ni() throws IOException {
+		return Integer.parseInt(nextToken());
+	}
+	double nd() throws IOException {
+		return Double.parseDouble(nextToken());
+	} 
+	String nextToken() throws IOException {
+		if(st==null || !st.hasMoreTokens())
+			st=new StringTokenizer(in.readLine());
+		return st.nextToken();
+	}
+	int[] nia(int start,int b) throws IOException {
+		int a[]=new int[b];
+		for(int i=start;i<b;i++)
+			a[i]=ni();
+		return a;
+	}
+	long[] nla(int start,int n) throws IOException {
+		long a[]=new long[n];
+		for (int i=start; i<n ;i++ ) {
+			a[i]=nl();
+		}
+		return a;
+	}
+}

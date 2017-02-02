@@ -1,0 +1,7 @@
+	int go(int u) {
+		int res=partial[u];
+		for(int v : gr[u]) {
+			res+=go(v);
+		}
+		return ans[u]=res;
+	}

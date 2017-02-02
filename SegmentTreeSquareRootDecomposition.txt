@@ -1,0 +1,112 @@
+//package segmenttreelazyprop;
+
+import java.io.*;
+import java.util.*;
+class SegmentTreeSquareRootDecomp
+    {
+    static int a[]=new int[100010];
+    static int stree[];
+    static int cnt[]=new int[100010];
+    public static void main(String args[])throws IOException
+        {
+        BufferedReader in=new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st=new StringTokenizer(in.readLine());
+        int n=Integer.parseInt(st.nextToken());
+        int m=Integer.parseInt(st.nextToken());
+        st=new StringTokenizer(in.readLine());
+       // int a[]=new int[n];
+        for(int i=1;i<=n;i++)
+        a[i]=Integer.parseInt(st.nextToken());
+        int len=2*(int)(Math.pow(2,(Math.log(n)/Math.log(2))+1));
+        stree=new int[len];
+        build_tree(1,1,n);
+        Node node[]=new Node[m];
+        for(int i=0;i<m;i++)
+            {
+                st=new StringTokenizer(in.readLine());
+                node[i]=new Node();
+                node[i].L=Integer.parseInt(st.nextToken());
+                node[i].R=Integer.parseInt(st.nextToken());
+                node[i].i=i;
+            }
+        Arrays.sort(node , new Comparator<Node>(){
+           @Override
+            public int compare(Node x,Node y)
+                {
+                if(x.L/555!=y.L/555)
+                    return x.L/555-y.L/555;
+                else
+                    return x.R-y.R;
+            }
+        });
+        int currentL=1;
+        int currentR=1;
+        int max=0;
+        int ans[]=new int[m];
+        for(int i=0;i<m;i++)
+            {
+                int L=node[i].L;
+                int R=node[i].R;
+                max=query_tree(1,1,n,L,R);
+                while(currentL<L)
+                    {
+                        remove(currentL);
+                        currentL++;
+                    }
+                while(currentR<=R)
+                    {
+                        add(currentR);
+                        currentR++;
+                    }
+                while(currentL>L)
+                    {
+                        add(currentL-1);
+                        currentL--;
+                    }
+                while(currentR>R+1)
+                    {
+                        remove(currentR-1);
+                        currentR--;
+                    }
+            ans[node[i].i]=cnt[max];
+            }
+        for(int i=0;i<m;i++)
+            System.out.println(ans[i]);
+    }
+    public static void add(int index)
+        {
+            cnt[a[index]]+=1;
+        }
+    public static void remove(int index)
+        {
+            cnt[a[index]]-=1;
+        }
+    public static void build_tree(int index,int l,int r)
+        {
+            if(l==r)
+            {
+                stree[index]=a[l];
+                return;
+            }
+            if(l>r)
+                return;
+            int mid=(l+r)/2;
+            build_tree(2*index,l,mid);
+            build_tree(2*index+1,mid+1,r);
+            stree[index]=Math.max(stree[2*index],stree[2*index+1]);
+       }
+    public static int query_tree(int index,int l,int r,int i,int j)
+        {
+            if(i>r || j<l) return -1;
+            if(i<=l && j>=r)
+                return stree[index];
+            int mid=(l+r)/2;
+            int left=query_tree(2*index,l,mid,i,j);
+            int right=query_tree(2*index+1,mid+1,r,i,j);
+            return Math.max(left,right);
+        }
+}
+class Node
+    {
+    int i,L,R;
+}

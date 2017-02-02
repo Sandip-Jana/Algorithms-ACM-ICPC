@@ -1,0 +1,109 @@
+import java.io.*;
+import java.util.*;
+class Main
+{
+	static boolean visited[]=new boolean[100002];
+	public static void main(String args[])throws IOException
+	{
+		InputReader reader=new InputReader(System.in);
+		PrintWriter ob=new PrintWriter(System.out);
+		int t=reader.readInt();
+		while(t-->0)
+		{
+			int n=reader.readInt();
+			Arrays.fill(visited,false);
+			ArrayList<Set<Integer>> nodes=new ArrayList<Set<Integer>>(n);
+				int i;
+				for(i=0;i<n;i++)
+				nodes.add(new HashSet<Integer>());
+			int e=reader.readInt();
+			for(i=1;i<=e;i++)
+			{
+				int u=reader.readInt();
+				int v=reader.readInt();
+				nodes.get(u).add(v);
+				nodes.get(v).add(u);
+			}
+			int count=0;
+			for(i=0;i<n;i++)
+			{
+				if(!visited[i])
+				{
+				count+=1;
+				dfs(nodes,i);
+				}
+			}
+			ob.println(count);
+		}
+		ob.flush();
+	}
+	public static int dfs(List<Set<Integer>> nodes, int i)
+	{
+			Stack<Integer> stk=new Stack<Integer>();
+			stk.push(i);
+			visited[i]=true;
+			while(stk.isEmpty()==false)
+			{
+				int v=stk.pop();
+				for(int u : nodes.get(v))
+					{
+						if(!visited[u])
+							{
+								visited[u]=true;
+								stk.push(u);
+							}
+					}
+			}
+			return 0;
+	}
+static final class InputReader {
+        private final InputStream stream;
+        private final byte[] buf = new byte[1024];
+        private int curChar;
+        private int numChars;
+ 
+        public InputReader(InputStream stream) {
+            this.stream = stream;
+        }
+ 
+        private int read() throws IOException {
+            if (curChar >= numChars) {
+                curChar = 0;
+                numChars = stream.read(buf);
+                if (numChars <= 0) {
+                    return -1;
+                }
+            }
+            return buf[curChar++];
+        }
+ 
+        public final int readInt() throws IOException {
+            return (int)readLong();
+        }
+ 
+        public final long readLong() throws IOException {
+            int c = read();
+            while (isSpaceChar(c)) {
+                c = read();
+                if (c == -1) throw new IOException();
+            }
+            boolean negative = false;
+            if (c == '-') {
+                negative = true;
+                c = read();
+            }
+            long res = 0;
+            do {
+                res *= 10;
+                res += c - '0';
+                c = read();
+            } while (!isSpaceChar(c));
+            return negative ? -res : res;
+        }
+ 
+        private boolean isSpaceChar(int c) {
+            return c == ' ' || c == '\n' || c == '\r' || c == '\t' || c == -1;
+        }
+    }
+ 
+}  

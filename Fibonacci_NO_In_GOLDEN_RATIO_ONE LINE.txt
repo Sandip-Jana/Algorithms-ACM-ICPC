@@ -1,0 +1,18 @@
+import java.io.*;
+public class Main
+{
+	public static void main(String args[])throws IOException
+	{
+		BufferedReader in=new BufferedReader(new InputStreamReader(System.in));
+		int t=Integer.parseInt(in.readLine());
+		while(t-->0)
+		{
+		int n=Integer.parseInt(in.readLine());
+		double phi=((Math.sqrt(5)+1.0)/2.0);
+		double v=Math.pow(phi,n);
+		v=(v/(double)Math.sqrt(5))+0.5;
+		double ans=Math.floor(v);
+		System.out.println((int)ans);
+		}
+	}
+}

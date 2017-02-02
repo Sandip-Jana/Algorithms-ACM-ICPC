@@ -1,0 +1,83 @@
+import java.io.*;
+import java.util.*;
+public class div365D {
+	BufferedReader in;
+	PrintWriter ob;
+	StringTokenizer st;
+	public static void main(String[] args) throws IOException {
+		new div365D().run();
+	}
+	void run() throws IOException {
+		in=new BufferedReader(new InputStreamReader(System.in));
+		ob=new PrintWriter(System.out);
+		solve();
+		ob.flush();
+	}
+	void solve() throws IOException {
+		int n=ni();
+		int a[]=new int[n+1];
+		int prefix[]=new int[n+1];
+		for (int i=1; i<=n ; i++ ) {
+			a[i]=ni();
+			prefix[i]=a[i]^prefix[i-1];
+		}
+		int m=ni();
+		int Q[][]=new int[m][];
+		for (int i=0; i<m ; i++ ) {
+			Q[i]=new int[]{ni(),ni(),i};
+		}
+		Arrays.sort(Q,new Comparator<int []>(){
+			public int compare(int a[], int b[]) {
+				return a[1]-b[1];
+			}
+		});
+		int pointer=0;
+		int ans[]=new int[m];
+		int ft[]=new int[n+2];
+		Hashtable<Integer,Integer> cnt=new Hashtable<Integer,Integer>();
+		int p=0;
+		for (int i=1; i<=n ; i++ ) {
+				if(cnt.containsKey(a[i])) {
+					update(ft,n,cnt.get(a[i]),a[i]);
+				}
+				update(ft,n,i,a[i]);
+				cnt.put(a[i],i);
+				while(p<m && Q[p][1]<=i) {
+					int left=get_XOR_Query(ft,Q[p][0]-1);
+					int right=get_XOR_Query(ft,Q[p][1]);
+					int odd=left^right;
+					int all=prefix[Q[p][1]]^prefix[Q[p][0]-1];
+					ans[Q[p][2]]=all^odd;
+					++p;
+				}
+		}
+		for (int x : ans ) {
+			ob.println(x);
+		}
+	}
+	int get_XOR_Query(int ft[], int index) {
+		int sum=0;
+		while(index>0) {
+			sum^=ft[index];
+			index-=(index & -index);
+		}
+		return sum;
+	}
+	void update(int ft[],int max, int index, int val) {
+		while(index<=max) {
+			ft[index]=ft[index]^val;
+			index+=(index & -index);
+		}
+	}
+	long nl() throws IOException {
+		return Long.parseLong(nextToken());
+	}
+	int ni() throws IOException {
+		return Integer.parseInt(nextToken());
+	}
+	String nextToken() throws IOException {
+		if(st==null || !st.hasMoreTokens())
+			st=new StringTokenizer(in.readLine());
+		return st.nextToken();
+	}
+}

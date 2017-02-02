@@ -1,0 +1,87 @@
+import java.io.*;
+import java.util.*;
+class SegmentTree_SumPractice
+{
+    BufferedReader in;
+    PrintWriter ob;
+    StringTokenizer st;
+    int tree[],a[];
+    public static void main(String[] args) throws IOException {
+    	new SegmentTree_SumPractice().run();
+    }
+    void run() throws IOException {
+    	in=new BufferedReader(new InputStreamReader(System.in));
+    	ob=new PrintWriter(System.out);	
+    	solve();
+    	ob.flush();
+    }
+    void solve() throws IOException {
+    	int n=ni();
+    	a=new int[n];
+    	for(int i=0;i<n;i++)
+    		a[i]=ni();
+    	int len=2*((int)Math.pow(2,Math.log(n)/Math.log(2)+1));
+    	tree=new int[len+1];
+    	build_tree(1,0,n-1);
+    	while(true){
+    		System.out.println("Enter Your Query");
+    		int p=ni();
+    		int q=ni();
+    		System.out.println(querytree(1,0,n-1,p,q));	
+            System.out.println("Enter the index and Value for updation");
+            int index=ni();
+            int value=ni();
+            updatetree(index , value, 1 , 0 ,n-1);
+    		//if(p==q)
+    		//	break;
+    	}
+    }
+    void build_tree(int node, int l, int r) {
+    	if(l==r) {
+    		tree[node]=a[l];
+    	}
+    	else {
+    		int mid=(l+r)/2;
+    		build_tree(2*node,l,mid);
+    		build_tree(2*node+1,mid+1,r);
+    		int left=tree[2*node];
+    		int right=tree[2*node+1];
+    		tree[node]=tree[2*node]+tree[2*node+1];
+    	}
+    }
+
+    int querytree(int node, int l,int r,int i, int j ) {
+    	if(r<i || j<l) return 0;
+    	if(l>=i && r<=j) return tree[node];
+
+    	int p1= querytree(2*node, l,(l+r)/2, i,j);
+    	int p2= querytree(2*node+1 , (l+r)/2+1, r,i,j);
+    	return p1+p2; 
+    }
+
+    void updatetree(int index, int value, int node ,int l, int r) {
+        if(l==r) {
+            if(index==l)
+            tree[node]=value;
+            else
+            tree[node]=a[l];
+        }
+        else
+        {
+            int mid=(l+r)/2;
+            updatetree(index, value, node*2, l, mid);
+            updatetree(index, value, node*2+1, mid+1, r);
+            tree[node]=tree[node*2]+tree[node*2+1];
+        }
+    }
+
+    int ni() throws IOException {
+    	return Integer.parseInt(nextToken());
+    }
+
+    String nextToken() throws IOException{
+    	if(st==null || !st.hasMoreTokens())
+    		st=new StringTokenizer(in.readLine());
+    	return st.nextToken();
+    }
+}

@@ -1,0 +1,114 @@
+import java.io.*;
+import java.util.*;
+public class div153ATestingTries
+{
+	BufferedReader in;
+	PrintWriter ob;
+	StringTokenizer st;
+	public static void main(String[] args) throws IOException {
+		new div153ATestingTries().run();
+	}
+	void run() throws IOException {
+		in=new BufferedReader(new InputStreamReader(System.in));
+		ob=new PrintWriter(System.out);
+		solve();
+		ob.flush();
+	}
+	void solve() throws IOException {
+		int n=ni();
+		int a[]=new int[n];
+		int prefix=0,ans=0;
+		Trie triegraph=new Trie();
+		for(int i=0;i<n;i++) {
+			a[i]=ni();
+			prefix=prefix^a[i];
+			char s[]=getStringBinary(prefix);
+			triegraph.insert(s);
+			ans=Math.max(ans,Math.max(triegraph.query(s,prefix),prefix));
+		}
+		ob.print(ans);
+	}
+	char [] getStringBinary(int x) throws IOException {
+		char s[]=Integer.toBinaryString(x).toCharArray();
+		int l=s.length;
+		char c[]=new char[32];
+		for(int i=31,j=l-1;i>=0;i--,j--) {
+			if(j>=0)
+				c[i]=s[j];
+			else
+				c[i]='0';
+		}
+		return c;
+	}
+	int ni() throws IOException {
+		return Integer.parseInt(nextToken());
+	}
+	String nextToken() throws IOException {
+		while(st==null || !st.hasMoreTokens())
+			st=new StringTokenizer(in.readLine());
+		return st.nextToken();
+	}
+}
+class Trie {
+	Node root=new Node();
+	void insert(char s[]) {
+		Node temp=root;
+		for(int i=0;i<32;i++) {
+			if(temp.a[s[i]-'0']==null) 
+				temp.a[s[i]-'0']=new Node();
+			temp=temp.a[s[i]-'0'];
+		}
+	}
+	int query(char s[],int ele) {
+		Node temp=root; 
+		char res[]=new char[32];
+		int j=0;
+		for (int i=0 ; i<32 ;  i++ ) {
+			if(s[i]=='0') {
+					if(temp.a[1]!=null)
+						{
+							res[j++]='1';
+							temp=temp.a[1];
+						}
+					else
+						{
+							res[j++]='0';
+							temp=temp.a[0];
+						}
+			}
+			else {
+					if(temp.a[0]!=null)
+						{
+							res[j++]='0';
+							temp=temp.a[0];
+						}
+					else
+						{
+							res[j++]='1';
+							temp=temp.a[1];
+						}
+			}
+		}
+		return Integer.parseInt(new String(res),2)^ele;
+	}
+		void traverse(String prefix, Nodes temp,int i) {
+		if(i==0)
+			temp=root;
+		if(i==32) {
+			System.out.println(prefix);
+			return;
+		}
+		for(int j=0;j<2;j++) {
+			char next=(""+j).charAt(0);
+			if(temp.a[j]!=null) {
+				prefix+=next;
+				traverse(prefix,temp.a[j],i+1);
+				prefix=prefix.substring(0,prefix.length()-1);
+			}
+		}
+	}
+}
+class Node
+{
+	Node a[]=new Node[2];
+}

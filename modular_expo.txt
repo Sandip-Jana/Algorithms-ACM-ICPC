@@ -1,0 +1,13 @@
+long powmod(long base,long expo,long MOD)
+	{
+		long res=1L;
+		long power=base%MOD;
+		while(expo>0)
+		{
+			if(expo%2==1)
+				res=(res*power)%MOD;
+			power=(power*power)%MOD;
+			expo/=2;
+		}
+		return res;
+	}

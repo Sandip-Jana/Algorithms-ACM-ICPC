@@ -1,0 +1,88 @@
+import java.io.*;
+import java.util.*;
+public class div369Cnew
+{
+	BufferedReader in;
+	PrintWriter ob;
+	StringTokenizer st;
+	public static void main(String[] args) throws IOException {
+		new div369Cnew().run();
+	}
+	void run() throws IOException {
+		//in=new BufferedReader(new FileReader("input.txt"));
+		in=new BufferedReader(new InputStreamReader(System.in));
+		ob=new PrintWriter(System.out);
+		solve();
+		ob.flush();
+	}
+	void solve() throws IOException {
+		int n=ni();
+		int m=ni();
+		int k=ni();
+		int c[]=new int[n+1];
+		for (int i=1; i<=n ; i++ ) {
+			c[i]=ni();
+		}
+		long cost[][]=new long[n+1][m+1];
+		for (int i=1; i<=n ; i++ ) {
+			for (int j=1; j<=m ; j++ ) {
+				cost[i][j]=nl();
+			}
+		}
+		long dp[][][]=new long[n+1][m+1][k+2];
+		for (int i=0; i<=n ; i++ ) {
+			for (int j=0; j<=m ; j++ ) {
+				if(i==0)
+				Arrays.fill(dp[i][j],0);
+				else	
+				Arrays.fill(dp[i][j],Long.MAX_VALUE/10);
+			}
+		}
+		for (int j=1; j<=m ; j++ ) {
+			if(c[1]==0)
+			dp[1][j][1]=cost[1][j];
+			else if(c[1]==j)
+			dp[1][j][1]=0;
+		}
+		for (int i=2; i<=n ; i++ ) {
+			for(int j=1 ; j<=m ; j++) {
+						if(c[i]==0)
+						{
+							for (int u=1 ; u<=m ; u++ ) {
+								for (int v=1; v<=k ; v++ ) {
+										dp[i][j][(j==u)?v:v+1]=Math.min(dp[i][j][(j==u)?v:v+1],dp[i-1][u][v]+cost[i][j]);
+								}
+							}
+						}
+						else {
+							j=c[i];
+							for (int u=1 ; u<=m ; u++ ) {
+								for (int v=1; v<=k ; v++ ) {
+										dp[i][j][(j==u)?v:v+1]=Math.min(dp[i][j][(j==u)?v:v+1],dp[i-1][u][v]);
+								}
+							}
+							break;	
+						}
+			}
+		}
+		long ans=Long.MAX_VALUE/10;
+		for (int i=1; i<=m ; i++ ) {
+			ans=Math.min(ans,dp[n][i][k]);
+		}
+		if(ans==Long.MAX_VALUE/10)
+			ob.println("-1");
+		else
+			ob.println(ans);
+	}
+	long nl() throws IOException {
+		return Long.parseLong(nextToken());
+	}
+	int ni() throws IOException {
+		return Integer.parseInt(nextToken());
+	}
+	String nextToken() throws IOException {
+		if(st==null || !st.hasMoreTokens())
+			st=new StringTokenizer(in.readLine());
+		return st.nextToken();
+	}
+}

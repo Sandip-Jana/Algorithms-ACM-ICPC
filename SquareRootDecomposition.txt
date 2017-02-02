@@ -1,0 +1,141 @@
+import java.io.*;
+import java.util.*;
+class Dquery extends Node
+{
+	static int a[]=new int[31111];
+	static int cnt[]=new int[1000021];
+	static int answer=0;
+	public static void main(String args[])throws IOException
+	{
+		InputReader reader = new InputReader(System.in);
+		PrintWriter ob=new PrintWriter(System.out);
+		int n=reader.readInt();
+		for(int i=1;i<=n;i++)
+		{
+			a[i]=reader.readInt();
+		}
+		int m=reader.readInt();
+		Node node[]=new Node[m];
+		for(int i=0;i<m;i++)
+		{
+			node[i]=new Node();
+			node[i].L=reader.readInt();
+			node[i].R=reader.readInt();
+			node[i].i=i;
+			
+		}
+		Arrays.sort(node,new Comparator<Node>() {
+            @Override
+            public int compare(Node o1, Node o2) {
+            	if((o1.L/555)!=(o2.L/555))
+                return o1.L/555-o2.L/555;
+            	else
+            	return o1.R-o2.R;
+            }
+        });
+		int ans[]=new int[m];
+		int currentL=1;
+		int currentR=1;
+		int k=0;
+		for(int i=0;i<m;i++)
+		{
+			int L=node[i].L;
+			int R=node[i].R;
+			while(currentL<L)
+			{
+				remove(currentL);
+				currentL++;
+			}
+			while(currentR<=R)
+			{
+				add(currentR);
+				currentR++;
+			}
+			while(currentL>L)
+			{
+				add(currentL-1);
+				currentL--;
+			}
+			while(currentR>R+1)
+			{
+				remove(currentR-1);
+				currentR--;
+			}
+			if(node[i].i==k && i==k)
+			{
+				ob.println(answer);
+				k++;
+			}
+			ans[node[i].i]=answer;
+		}
+		for(int i=k;i<m;i++)
+			ob.println(ans[i]);
+		ob.flush();
+	}
+	public static void add(int index)
+	{
+		cnt[a[index]]+=1;
+		if(cnt[a[index]]==1)
+			answer+=1;
+	}
+	public static void remove(int index)
+	{
+		cnt[a[index]]-=1;
+		if(cnt[a[index]]==0)
+			answer--;
+	}
+	static final class InputReader {
+        private final InputStream stream;
+        private final byte[] buf = new byte[1024];
+        private int curChar;
+        private int numChars;
+ 
+        public InputReader(InputStream stream) {
+            this.stream = stream;
+        }
+ 
+        private int read() throws IOException {
+            if (curChar >= numChars) {
+                curChar = 0;
+                numChars = stream.read(buf);
+                if (numChars <= 0) {
+                    return -1;
+                }
+            }
+            return buf[curChar++];
+        }
+ 
+        public final int readInt() throws IOException {
+            return (int)readLong();
+        }
+ 
+        public final long readLong() throws IOException {
+            int c = read();
+            while (isSpaceChar(c)) {
+                c = read();
+                if (c == -1) throw new IOException();
+            }
+            boolean negative = false;
+            if (c == '-') {
+                negative = true;
+                c = read();
+            }
+            long res = 0;
+            do {
+                res *= 10;
+                res += c - '0';
+                c = read();
+            } while (!isSpaceChar(c));
+            return negative ? -res : res;
+        }
+ 
+        private boolean isSpaceChar(int c) {
+            return c == ' ' || c == '\n' || c == '\r' || c == '\t' || c == -1;
+        }
+    }
+ 
+} 
+class Node
+{
+	int L,R,i;
+	}
