@@ -1,6 +1,8 @@
+// Codeforces Round 369 Div 2 C
+
 import java.io.*;
 import java.util.*;
-public class div369Cnew
+public class div369C
 {
 	BufferedReader in;
 	PrintWriter ob;
