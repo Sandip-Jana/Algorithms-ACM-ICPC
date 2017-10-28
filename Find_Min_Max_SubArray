@@ -1,0 +1,41 @@
+import java.io.*;
+import java.util.*;
+public class Find_min_max 
+{
+	public static void main(String args[])throws IOException
+	{
+		new Find_min_max().run();
+	}
+	void run()throws IOException
+	{
+		BufferedReader in=new BufferedReader(new InputStreamReader(System.in));
+		int n=Integer.parseInt(in.readLine());
+		int a[]=new int[n+1];
+		StringTokenizer st=new StringTokenizer(in.readLine());
+		for(int i=1;i<=n;i++)
+			a[i]=Integer.parseInt(st.nextToken());
+		findminmax(a,n);
+	}
+	void findminmax(int a[],int n)
+	{
+		int min=a[1];
+		int max=a[1];
+		int mid=(n+1)/2;
+		int k=2;
+		if(n%2==0)
+		{
+			min=Math.min(a[1],a[2]);
+			max=Math.max(a[1],a[2]);
+			mid=(n+2)/2;
+			k=3;
+		}
+		for(int i=k,j=mid+1;i<=mid && j<=n;i++,j++)
+		{
+			int curr_min=Math.min(a[i],a[j]);
+			int curr_max=Math.max(a[i],a[j]);
+			min=Math.min(min, curr_min);
+			max=Math.max(max, curr_max);
+		}
+		System.out.println(min+" "+max);
+	}
+}
