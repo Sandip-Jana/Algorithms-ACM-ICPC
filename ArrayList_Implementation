@@ -1,0 +1,59 @@
+import java.io.*;
+import java.util.*;
+public class ArrayListExample {
+	public static void main(String args[])throws IOException{
+		BufferedReader in=new BufferedReader(new InputStreamReader(System.in));
+		ArrayList<Integer> alist=new ArrayList<Integer>();
+		System.out.println("Enter 1 to add element");
+		System.out.println("Enter 2 to get element");
+		System.out.println("Enter 3 to set element");
+		boolean condition=true;
+		while(condition){
+			System.out.println("Enter your choice");
+			int ch=Integer.parseInt(in.readLine());
+			switch(ch)
+			{
+			case 1: System.out.println("Enter element to add");
+					int element=Integer.parseInt(in.readLine());
+					alist.add(element);
+					break;
+			case 2: System.out.println("Enter element to get");
+					int index=Integer.parseInt(in.readLine());
+					//gives exception if element at that index is not present
+					int value=0;
+					if(alist.size()>index)
+					value=alist.get(index);
+					System.out.println(value);
+					break;
+			case 3: System.out.println("Enter element to set");
+					int index2=Integer.parseInt(in.readLine());
+					int updatedValue=Integer.parseInt(in.readLine());
+					//will throw an exception if index is greater than arraylist size
+					if(index2<alist.size())
+					alist.set(index2, updatedValue);
+					break;
+			case 4: System.out.println("Enter element to remove");
+					int val=Integer.parseInt(in.readLine());
+					alist.remove(new Integer(val));
+					break;
+			case 5: System.out.println("Enter index of element to remove");
+					int index3=Integer.parseInt(in.readLine());
+					//this will throw an IndexOutOfBounds exception if an attempt is made to remove
+					//element from an index which is beyond the limits of arraylist
+					System.out.println("MAXM SIZE"+alist.size());
+					if(alist.size()>index3)
+					alist.remove(index3);
+					break;
+			case 6: Object a[]=alist.toArray();
+					Integer b[]=alist.toArray(new Integer[alist.size()]);
+					for(int i : b)
+					System.out.println(i);
+					break;
+			case 7: System.out.println(alist);
+					break;
+			default : condition= false;
+					  break;
+			}
+		}
+	}
+}
