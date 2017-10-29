@@ -1,0 +1,39 @@
+import java.io.*;
+import java.util.*;
+class Priority_Queue_Example
+{
+	public static void main(String args[])throws IOException{
+		Scanner sc=new Scanner(System.in);
+		PriorityQueue<Node> pq=new PriorityQueue<Node>(
+				new Comparator<Node>(){
+					public int compare(Node a , Node b){
+						return a.value-b.value;
+					}
+				});
+		Node a=new Node();
+		a.value=1;
+		a.i=2;
+		a.j=3;
+		Node b=new Node();
+		b.value=1;
+		b.i=2;
+		b.j=3;
+		pq.offer(a);
+		pq.offer(b);
+		pq.offer(a);
+		for(Node  x: pq){
+			System.out.println(x.i+" "+x.j+" "+x.value);
+		}
+		System.out.println("After Remove");
+		pq.remove((Node)a);
+		for(Node  x: pq){
+			System.out.println(x.i+" "+x.j+" "+x.value);
+		}
+		pq.clear();
+	}
+}
+class Node{
+	int value;
+	int i;
+	int j;
+}
