@@ -1,0 +1,77 @@
+import java.io.*;
+import java.util.*;
+public class Chinese_Remainder_Theorem
+{
+	BufferedReader in;
+	StringTokenizer st;
+	PrintWriter ob;
+	public static void main(String[] args) throws IOException {
+		new Chinese_Remainder_Theorem().run();
+	}
+	void run() throws IOException {
+		in=new BufferedReader(new InputStreamReader(System.in));
+		ob=new PrintWriter(System.out);
+		solve();
+		ob.flush();
+	}
+	void solve() throws IOException {
+		System.out.println("Enter the number of equations : ");
+		int k=ni(); // number of equations to solve;
+		int rem[]=new int[k];  // store k remainders
+		int prime[]=new int[k];// store k prime numbers
+		System.out.println("Enter the Remainders : ");
+		for (int i=0 ; i<k ; i++ )
+			rem[i]=ni();
+		System.out.println("Enter the Relative Primes");
+		for (int i=0;  i<k ; i++ ) {
+			prime[i]=ni();
+		}
+		long sum=0;
+		int N=1;
+		for (int i=0; i<k ; i++ ) {
+			N*=prime[i];
+		}
+		for(int i=0 ; i<k ; i++ ) {
+			int pp=N/prime[i];
+			sum=sum+( rem[i] * inverse( pp , prime[i] ) * pp   );
+		}
+		ob.println("Solution for the equations = " + sum%N); 
+	}
+
+	int inverse(int a, int b) {
+		Triplet p= euclid_algo( a , b , 0 , 0);
+		int x=(p.x/p.z)%b;
+		return ((x%b+b)%b);
+	}
+
+	Triplet euclid_algo(int a, int b, int x , int y) {
+		if(b==0) {
+			x=1;
+			y=0;
+			return new Triplet(x,y,a);
+		}
+		int x1=0 , y1=0 ;
+		Triplet p = euclid_algo( b , a%b , x1 , y1 ); // gcd(b,a%b) = b*x + (a-(a/b)*b)*y = a*y + b*(x - (a/b)*y )
+		x=p.y;
+		y=p.x-((a/b)*p.y);
+		return new Triplet(x,y,p.z);
+	}
+
+	int ni() throws IOException {
+		return Integer.parseInt(nextToken());
+	}
+	String nextToken() throws IOException {
+		if(st==null || !st.hasMoreTokens())
+			st=new StringTokenizer(in.readLine());
+		return st.nextToken();
+	}
+}
+class Triplet
+{
+	int x,y,z;
+	public Triplet(int x, int y, int z) {
+		this.x=x;
+		this.y=y;
+		this.z=z;
+	}
+}
