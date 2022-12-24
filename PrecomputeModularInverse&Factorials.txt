@@ -1,0 +1,33 @@
+import java.util.*;
+import java.util.List;
+
+class Solution {
+
+    public static void main(String[] args) {
+        new Solution().run();
+    }
+
+    void run() {
+        
+    }
+
+
+    public int countAnagrams(String s) {
+        precompute();
+    }
+
+    int MAX = 100000 + 1;
+    long fact[] = new long[MAX];
+    long inv[] = new long[MAX];
+    long inv_fact[] = new long[MAX];
+
+    private void precompute() {
+        fact[0] = fact[1] = inv[1] = inv_fact[1] = inv_fact[0] =  1;
+        int mod = (int) 1e9 + 7;
+        for (int i = 2; i < MAX; i++) {
+            inv[i] = mod - (mod/i) * inv[mod%i] % mod;
+            fact[i] = ((fact[i - 1] % mod) * (i % mod)) % mod;
+            inv_fact[i] = inv_fact[i-1] * inv[i] % mod;
+        }
+    }
+}
